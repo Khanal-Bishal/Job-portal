@@ -1,0 +1,20 @@
+const express = require("express");
+const router = express.Router();
+const Joi = require("joi");
+
+const { signup, login } = require("../controllers/employeerAuth");
+const validateSchema = require("../middlewares/validateSchema");
+
+const signupSchema = Joi.object({
+  companyname: Joi.string().required().max(255).min(1),
+  password: Joi.string().required().max(255).min(4),
+  email: Joi.string().email().required(),
+  phone: Joi.number(),
+  city: Joi.string().max(255),
+  companyindustry: Joi.string().max(255),
+});
+
+router.post("/signup", validateSchema(signupSchema), signup);
+router.post("/login", login);
+
+module.exports = router;
